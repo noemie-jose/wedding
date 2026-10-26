@@ -221,8 +221,10 @@
       phone: (data.get('phone') || '').toString().trim(),
       name: name,
       attending: (data.get('attending') || '').toString(),
+      dietYou: mine,
       plusOne: plusOne,
       plusOneName: plusOne ? plusOneName : '',
+      dietPlus: theirs,
       children: children,
       dietary: dietary,
       partySize: coming ? 1 + (plusOne ? 1 : 0) + children.length : 0,
@@ -297,19 +299,37 @@
       post.appendChild(input);
     }
 
-    var f = cfg.fields;
+    var f = cfg.fields || {};
     add(f.name, payload.name);
     add(f.email, payload.email);
     add(f.phone, payload.phone);
     add(f.attending, payload.attending);
-    add(f.partySize, payload.partySize || '');
+    add(f.dietYou, payload.dietYou);
     add(f.plusOne, payload.plusOne ? 'Yes' : 'No');
     add(f.plusOneName, payload.plusOneName);
-    add(f.guests, payload.children.map(function (c, i) {
-      return (c.name || (T.child + (i + 1))) + ' (' + (c.age || '?') + ')';
-    }).join(', '));
-    add(f.dietary, payload.dietary.map(function (d) { return d.who + ': ' + d.note; }).join('; '));
-    add(f.note, payload.note);
+    add(f.dietPlus, payload.dietPlus);
+    add(f.hasChildren, payload.children.length ? 'Yes' : 'No');
+    add(f.childCount, payload.children.length || '');
+    add(f.partySize, payload.partySize || '');
+
+    // One question per child, so each name, age and note gets its own column.
+    (cfg.children || []).forEach(function (slot, i) {
+      var c = payload.children[i];
+      if (!c) return;
+      add(slot.name, c.name);
+      add(slot.age, c.age);
+      add(slot.diet, c.diet);
+    });
+
+    // If more children were listed than the form has blocks for, keep them in the note.
+    var extra = payload.children.slice((cfg.children || []).length);
+    var noteText = payload.note;
+    if (extra.length) {
+      noteText = [noteText, 'Additional children: ' + extra.map(function (c) {
+        return (c.name || '?') + ' (' + (c.age || '?') + ')' + (c.diet ? ', ' + c.diet : '');
+      }).join('; ')].filter(Boolean).join(' | ');
+    }
+    add(f.note, noteText);
 
     document.body.appendChild(post);
     post.submit();

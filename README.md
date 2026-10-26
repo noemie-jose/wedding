@@ -31,6 +31,25 @@ language, so a guest reading `travel.html` lands on `fr/travel.html`.
 
 ---
 
+## Start Here: The Whole Thing in Order
+
+Allow about half an hour. Each step is spelled out in the section named beside it.
+
+1. Unzip the folder somewhere you can find it, for example your Desktop. (below)
+2. Create a GitHub repository and upload everything inside the folder. (section 1)
+3. Turn on GitHub Pages and check the site loads. (section 1)
+4. Make sure `.nojekyll` is there; add it if it is missing. (section 1b)
+5. Create the Google Form and copy the config block it prints. (section 2)
+6. Paste that block into `js/rsvp-config.js` on GitHub. (section 2)
+7. Send yourself a test RSVP and check it lands in the spreadsheet. (section 2)
+8. Share the link and the password `nonowayjose` with your guests. (section 6)
+
+Before you share it, read the page once as a guest would and fill in anything marked
+**"to come"**: the venue, the times, the dress code and the hotel block. (section 3)
+
+
+---
+
 ## 0. The Two Languages
 
 English lives at the root, French under `fr/`. Both use the same CSS, JavaScript and images, so a
@@ -142,6 +161,12 @@ result is an ordinary form you edit in the normal Forms editor afterwards.
 5. Open the **Execution log** at the bottom. It prints links to the form, the guest view and the
    responses spreadsheet, then a block starting `window.RSVP_CONFIG = {`.
 6. Copy that block, from `window.RSVP_CONFIG` down to the closing `};`.
+
+   If you already made a form with an earlier version of this script, delete it and its
+   "RSVPs ·" spreadsheet from Drive first: the question set has changed. If a run fails partway
+   but the form was already created, do not run it again or you get a duplicate; copy that form's
+   edit URL into `EXISTING_FORM_URL` at the top of the script and run
+   **printConfigForExistingForm**, which prints the same block for a form that already exists.
 7. In your GitHub repo open `js` then `rsvp-config.js`, click the pencil, select everything below
    the comment at the top, and paste the block over it. **Commit changes**.
 8. Wait a minute, open your site's RSVP page and send yourself a test reply. The yellow owner box
@@ -155,23 +180,31 @@ If you would rather not run a script at all:
 1. Go to <https://forms.google.com> and start a blank form.
 2. Add these questions, in this order. The **answer options must match exactly**, character for
    character, or the answers land in the wrong place:
-   - Full name(s), short answer, required
+   - Your full name, short answer, required
    - Email, short answer, required
    - Phone, short answer, required
    - Will you join us?, multiple choice, required, options `Joyfully accepts` and
      `Regretfully declines`
-   - How many of you are coming in total?, short answer
+   - Your dietary needs, short answer
    - Bringing a plus one?, multiple choice, options `Yes` and `No`
    - Plus one's name, short answer
-   - Children, paragraph
-   - Dietary needs, paragraph
+   - Plus one's dietary needs, short answer
+   - Bringing children?, multiple choice, options `Yes` and `No`
+   - How many children?, short answer
+   - Then three short answers per child, for six children:
+     `Child 1 name`, `Child 1 age`, `Child 1 dietary needs`, `Child 2 name` and so on up to
+     `Child 6 dietary needs`. Eighteen questions, named exactly like that.
+   - How many of you are coming in total?, short answer
    - Anything else we should know?, paragraph
+
+   That is a lot of clicking, which is why the script exists.
 3. Click the three dots (top right) and choose **Get pre-filled link**.
 4. Fill in every single box with anything, then click **Get link** and **Copy link**.
 5. Paste that link into a text editor. It is full of `entry.1234567890=something` pairs, in the
    same order as your questions. Each number belongs to the question above it.
 6. In `js/rsvp-config.js`, put each number next to the matching name, like
-   `name: "entry.1845729301",`.
+   `name: "entry.1845729301",`. The child questions go in the `children` list, three ids per
+   child, in order.
 7. For `formAction`, take the form's normal share link and replace `/viewform` with
    `/formResponse`.
 8. Commit, then send yourself a test RSVP and check it arrives.
@@ -192,6 +225,31 @@ If you would rather not run a script at all:
   if someone RSVPs twice, you get two rows, and the newest one wins; the site cannot show a
   returning guest what they sent before. It does notice, on that person's own browser, that an
   RSVP was already sent and says so above the form.
+
+### What the Form Collects
+
+The form mirrors the website question for question, with a field per person rather than one
+bundled cell, so the spreadsheet gets columns like "Child 2 age" and "Plus one's dietary needs":
+
+| On the website | In the form |
+|---|---|
+| Your full name | Your full name |
+| Email, phone | Email, Phone |
+| Will you join us? | Will you join us? |
+| Your dietary checkbox and note | Your dietary needs |
+| Bringing a plus one? | Bringing a plus one? |
+| Their name and dietary note | Plus one's name, Plus one's dietary needs |
+| Bringing children?, how many | Bringing children?, How many children? |
+| Each child's name, age, dietary note | Child 1 name / age / dietary needs, up to Child 6 |
+| (worked out for you) | How many of you are coming in total? |
+| Anything else we should know? | Anything else we should know? |
+
+Only the name, email, phone and accept-or-decline are required, so the form still works on its own
+if you ever send someone the plain Google Form link.
+
+The website offers up to six children, matching the six blocks in the form. To change that, raise
+`MAX_CHILDREN` in `form/create-rsvp-form.gs`, rebuild the form, and add the matching `<option>`
+values to the `childCount` dropdown in `rsvp.html` and `fr/rsvp.html`.
 
 ### If Something Goes Wrong
 
@@ -281,6 +339,22 @@ knows to open the page source, look in `js/gate.js`, or browse the repo on githu
 every page without the password. Nobody is going to do that to find out your brunch plans, but do
 not put anything on the site you would mind a stranger reading: no door codes, no private
 addresses, no personal details about other people.
+
+### Hiding the Repository Itself
+
+The repository is public by default, and on GitHub's free plan it has to be: Pages only publishes
+from a public repo. Two ways around it:
+
+- **GitHub Pro** (a few dollars a month, see <https://github.com/pricing>) lets Pages publish from
+  a **private** repository. Nobody can browse your files on github.com, but the site it serves is
+  still public, so the HTML, CSS and JavaScript can still be read with View Source. It raises the
+  bar without changing the ceiling.
+- **A truly private site** is only available to GitHub Enterprise Cloud organisations, which is
+  not worth it here. Use Cloudflare Access below instead.
+
+To flip an existing repo: Settings > scroll to the bottom > Danger Zone > **Change repository
+visibility** > Make private. Then check Settings > Pages still shows the site as live; if Pages
+switched itself off, you are on the free plan and need Pro for this.
 
 ### If You Ever Want the Real Thing
 
