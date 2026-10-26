@@ -17,39 +17,30 @@
 
 window.RSVP_CONFIG = {
 
-  // e.g. "https://docs.google.com/forms/d/e/1FAIpQLSc.../formResponse"
-  formAction: "",
-
+  formAction: "https://docs.google.com/forms/d/e/1FAIpQLSdiCbsPnXD-UNwQR45FniTwpvS66DdSQWNqEzLLdNhFNnbsuA/formResponse",
   fields: {
-    name:        "",   // Your full name
-    email:       "",   // Email
-    phone:       "",   // Phone
-    attending:   "",   // Joyfully accepts / Regretfully declines
-    dietYou:     "",   // Your dietary needs
-    plusOne:     "",   // Bringing a plus one: Yes / No
-    plusOneName: "",   // Plus one's name
-    dietPlus:    "",   // Plus one's dietary needs
-    hasChildren: "",   // Bringing children: Yes / No
-    childCount:  "",   // How many children
-    partySize:   "",   // How many people in total
-    note:        ""    // Anything else
+    name: "entry.646897813",
+    email: "entry.249828806",
+    phone: "entry.501556260",
+    attending: "entry.135737037",
+    dietYou: "entry.1397013090",
+    plusOne: "entry.215615265",
+    plusOneName: "entry.3677380",
+    dietPlus: "entry.1113268227",
+    hasChildren: "entry.1491081771",
+    childCount: "entry.519831473",
+    partySize: "entry.1743440937",
+    note: "entry.1511552200"
   },
-
-  // One row per child block on the page, in order.
   children: [
-    { name: "", age: "", diet: "" },   // Child 1
-    { name: "", age: "", diet: "" },   // Child 2
-    { name: "", age: "", diet: "" },   // Child 3
-    { name: "", age: "", diet: "" },   // Child 4
-    { name: "", age: "", diet: "" },   // Child 5
-    { name: "", age: "", diet: "" }    // Child 6
+    { name: "entry.1515641833", age: "entry.1306687318", diet: "entry.2015445211" },   // Child 1
+    { name: "entry.1044644014", age: "entry.1116307460", diet: "entry.993443288" },   // Child 2
+    { name: "entry.453654210", age: "entry.483965021", diet: "entry.2090630910" },   // Child 3
+    { name: "entry.337721322", age: "entry.1818733219", diet: "entry.1584470985" },   // Child 4
+    { name: "entry.597458670", age: "entry.1635277398", diet: "entry.1331679122" },   // Child 5
+    { name: "entry.415786445", age: "entry.1691680304", diet: "entry.433778911" }   // Child 6
   ],
-
-  // Shown on the page and in the confirmation message.
   rsvpBy: "31 December 2026",
   rsvpByFr: "31 décembre 2026",
-
-  // Optional: the plain Google Form link. Shown to you as a fallback
-  // while the connection above is still empty.
-  fallbackFormUrl: ""
+  fallbackFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdiCbsPnXD-UNwQR45FniTwpvS66DdSQWNqEzLLdNhFNnbsuA/viewform"
 };
