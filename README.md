@@ -10,18 +10,19 @@ weekend.html         The Weekend: Friday / Saturday / Sunday
 travel.html          Travel & Stay: Geneva, transfers, flights, hotel block
 annecy.html          Annecy: things to do around the lake
 faq.html             FAQ, including "no registry"
-rsvp.html            RSVP, saved to and read back from a Google Sheet
+rsvp.html            RSVP, posted into a Google Form
 404.html             Not-found page
 fr/                  The same eight pages in French
 css/style.css        All styling. Colors and fonts are the variables at the top.
 js/main.js           Mobile menu + countdown
+js/gate.js           The password screen
 js/rsvp.js           RSVP form behaviour
 js/rsvp-config.js    <- the one file you must fill in
 js/story.js          The Our Story map, timeline and horizontal view
 js/story-data.js     Every photo's date, place, title and caption, in both languages
 js/vendor/           d3 and topojson, used only by the story page
 data/map-data.js     Country and US state outlines for the map
-form/rsvp-backend.gs Apps Script web app: saves and looks up RSVPs
+form/create-rsvp-form.gs Apps Script that builds the Google Form and prints its ids
 img/                 hero.jpg and the 56 story photos
 ```
 
@@ -66,10 +67,10 @@ step below can be done in the browser.
 8. Wait a minute, then reload that page. It shows your address, something like
    `https://yourname.github.io/wedding/`. Open it: the site is live.
 
-One file is easy to miss when dragging: `.nojekyll`. It starts with a dot, so your Mac or PC may
-hide it. If the site looks unstyled, that file probably did not upload. Press Cmd+Shift+Period on a
-Mac (Ctrl+H on Windows) in Finder/Explorer to show hidden files, then upload it on its own with
-**Add file > Upload files**.
+One file is easy to miss when dragging: `.nojekyll`. It starts with a dot, so your Mac or PC
+hides it by default. Without it GitHub ignores folders whose names start with an underscore and
+can mangle a build; the site may look unstyled or a page may 404. See the next section for how to
+add it after the fact.
 
 **A custom domain** such as `noemieandjose.com`: buy it anywhere, then in Settings > Pages put it
 in **Custom domain**. At your registrar add a CNAME record pointing `www` at
@@ -94,88 +95,114 @@ Then turn on Pages as in steps 6 to 8 above.
 
 ---
 
-## 2. Set Up the RSVP Backend
+## 1b. Adding `.nojekyll` After the Fact
 
-### Why it is a script and not a Google Form
+If you already uploaded everything else, this takes a minute. You do not need the file from the
+zip: GitHub can make an empty one for you.
 
-A Google Form only accepts answers. Nothing can read the responses back out from a web page, so a
-Form alone could never tell a returning guest "you already RSVP'd" or show them what they sent. The
-site therefore talks to a small Google Apps Script web app that you own, which keeps one row per
-household in a Google Sheet. Same Google account, same spreadsheet you would have had, and it can
-both save and look up.
+1. Open your repository on github.com.
+2. Check whether it is already there: look at the file list. If you see `.nojekyll`, you are done.
+3. Click **Add file** (top right of the file list) and choose **Create new file**.
+4. In the filename box type exactly:  `.nojekyll`  with the leading dot and no extension.
+5. Leave the file contents completely empty.
+6. Scroll down and click **Commit changes**, then **Commit changes** again in the dialog.
+7. Wait a minute, then hard refresh your site (Cmd+Shift+R, or Ctrl+Shift+R on Windows).
 
-### Steps
+To upload the real file from the folder instead: on a Mac press **Cmd+Shift+Period** in Finder to
+reveal hidden files (Windows: Explorer > View > Show > Hidden items), then use **Add file >
+Upload files** and drag `.nojekyll` in on its own. The empty file you create in step 3 does exactly
+the same job; the file only needs to exist.
 
-1. Go to <https://script.google.com> and sign in with the Google account that should own the
-   RSVP list.
-2. Click **New project** (top left).
-3. Delete the few lines of sample code in the editor.
-4. Open `form/rsvp-backend.gs` from the site folder in any text editor, select all, copy, and paste
-   it into the Apps Script editor.
-5. Click the **save** icon. Name the project something like "Wedding RSVP".
-6. In the toolbar, make sure the function dropdown shows **setup**, then click **Run**.
-7. Google asks for permission the first time: **Review permissions** > choose your account >
-   **Advanced** > **Go to (your project name) (unsafe)** > **Allow**. That warning appears for
-   every unpublished personal script; you are approving your own code.
-8. When it finishes, open **Execution log** at the bottom. It prints a link to a new spreadsheet
-   called "RSVPs · Noémie & Jose (Annecy 2027)". Open it and keep the tab: this is your guest list.
-9. Back in Apps Script, click **Deploy** (top right) > **New deployment**.
-10. Click the gear next to "Select type" and choose **Web app**.
-11. Set **Execute as: Me** and **Who has access: Anyone**. The second one matters: without it your
-    guests get an error. "Anyone" means anyone with the link, not anyone with a Google account.
-12. Click **Deploy**, approve if asked, then **copy the Web app URL**. It looks like
-    `https://script.google.com/macros/s/AKfy...long.../exec`.
+To check it worked, open `https://yourname.github.io/your-repo/css/style.css` in a browser. If you
+see the stylesheet text, GitHub is serving your files as they are.
 
-### Connect the Site to It
+---
 
-13. In your GitHub repo open `js` then `rsvp-config.js`, and click the pencil to edit.
-14. Paste your URL between the quotes on the `apiUrl` line:
-    `apiUrl: "https://script.google.com/macros/s/AKfy.../exec",`
-15. Click **Commit changes**.
+## 2. Set Up the Google Form
 
-### Check It Works
+RSVPs land in a Google Form, so they collect in the Form's own responses view and in a linked
+Google Sheet, the way any Google Form works. The website posts into it behind the scenes, so your
+guests fill in your page and never see a Google screen.
 
-16. Open your site, go to RSVP, and send yourself a test reply. The yellow "Site owners" box should
-    be gone.
-17. Look at the spreadsheet: a row appears with your answers.
-18. Reload the RSVP page and type the same email address. You should see "You have already RSVP'd"
-    with your answers filled back in, and the button now reading "Update our RSVP". Change
-    something, send again, and the same row updates rather than a second one appearing.
-19. Delete your test row from the spreadsheet when you are done. Delete the whole row, so the
-    numbering stays clean.
+The fiddly part is that every question in a Google Form has a hidden id like `entry.1845729301`,
+and the site needs those ids to post to the right boxes. The script below creates the form and
+prints the ids for you. You visit script.google.com once to run it, nothing gets deployed, and the
+result is an ordinary form you edit in the normal Forms editor afterwards.
 
-### Two Things to Remember
+### Quick Way: Let the Script Build the Form
 
-- **If you edit `rsvp-backend.gs` later**, you must redeploy for the change to reach the live site:
-  Deploy > Manage deployments > pencil icon > Version: **New version** > Deploy. The URL stays the
-  same.
-- **Want email alerts for new RSVPs?** In the spreadsheet: Tools > Notification settings (or
-  Extensions > Apps Script) and set "Notify me when changes are made". Google emails you on each
-  new row.
+1. Go to <https://script.google.com> and sign in with the Google account that should own the RSVP
+   list. Click **New project**.
+2. Delete the sample code. Open `form/create-rsvp-form.gs` from the site folder, copy all of it,
+   paste it in, and save.
+3. With **createRsvpForm** in the function dropdown, click **Run**.
+4. Approve the permissions the first time: **Review permissions** > your account > **Advanced** >
+   **Go to (project name) (unsafe)** > **Allow**. That warning appears for every personal script;
+   you are approving your own code.
+5. Open the **Execution log** at the bottom. It prints links to the form, the guest view and the
+   responses spreadsheet, then a block starting `window.RSVP_CONFIG = {`.
+6. Copy that block, from `window.RSVP_CONFIG` down to the closing `};`.
+7. In your GitHub repo open `js` then `rsvp-config.js`, click the pencil, select everything below
+   the comment at the top, and paste the block over it. **Commit changes**.
+8. Wait a minute, open your site's RSVP page and send yourself a test reply. The yellow owner box
+   should be gone, and the response should appear in the spreadsheet. Delete the test row when
+   you are happy.
+
+### By Hand Instead
+
+If you would rather not run a script at all:
+
+1. Go to <https://forms.google.com> and start a blank form.
+2. Add these questions, in this order. The **answer options must match exactly**, character for
+   character, or the answers land in the wrong place:
+   - Full name(s), short answer, required
+   - Email, short answer, required
+   - Phone, short answer, required
+   - Will you join us?, multiple choice, required, options `Joyfully accepts` and
+     `Regretfully declines`
+   - How many of you are coming in total?, short answer
+   - Bringing a plus one?, multiple choice, options `Yes` and `No`
+   - Plus one's name, short answer
+   - Children, paragraph
+   - Dietary needs, paragraph
+   - Anything else we should know?, paragraph
+3. Click the three dots (top right) and choose **Get pre-filled link**.
+4. Fill in every single box with anything, then click **Get link** and **Copy link**.
+5. Paste that link into a text editor. It is full of `entry.1234567890=something` pairs, in the
+   same order as your questions. Each number belongs to the question above it.
+6. In `js/rsvp-config.js`, put each number next to the matching name, like
+   `name: "entry.1845729301",`.
+7. For `formAction`, take the form's normal share link and replace `/viewform` with
+   `/formResponse`.
+8. Commit, then send yourself a test RSVP and check it arrives.
+
+### Good to Know
+
+- **Where the answers go:** in the form, click **Responses**, then the green Sheets icon to open
+  or create the linked spreadsheet. Every RSVP is a row.
+- **Email alerts:** in the Responses tab, three dots > **Get email notifications for new
+  responses**.
+- **Editing the form later:** change question wording freely. Do not change the answer options for
+  "Will you join us?" or "Bringing a plus one?" without changing the matching `value="..."` in
+  `rsvp.html` and `fr/rsvp.html`, and never reorder or delete a question without updating its id
+  in `rsvp-config.js`.
+- **Workspace accounts:** in the form, Settings > Responses, make sure it is not restricted to
+  people in your organisation, or outside guests cannot reply.
+- **One limitation to expect:** a Google Form can be written to but never read from a web page. So
+  if someone RSVPs twice, you get two rows, and the newest one wins; the site cannot show a
+  returning guest what they sent before. It does notice, on that person's own browser, that an
+  RSVP was already sent and says so above the form.
 
 ### If Something Goes Wrong
 
-- *Guests see "That did not go through":* the deployment is probably not set to "Anyone". Deploy >
-  Manage deployments > pencil > check the access setting > New version > Deploy.
-- *"Run setup() first" in the sheet or an error on save:* the `setup` function was never run, or it
-  ran under a different Google account than the deployment.
-- *The yellow owner box still shows:* `apiUrl` is empty or has a typo. It must be the `/exec` URL
-  in quotes, with the comma after it.
-- *Nothing changes after an edit:* hard refresh the page (Cmd+Shift+R, or Ctrl+Shift+R on Windows).
-
-### Privacy
-
-"Anyone" means someone who has both the web app URL and a guest's exact email address could read
-that one RSVP. For a wedding page that is the normal bar. To lock it down, set `SECRET` at the top
-of `rsvp-backend.gs` to a random string, put the same string in `secret` in `js/rsvp-config.js`,
-and redeploy.
-
-### What the Form Collects
-
-One response per household, keyed by email: name, email, phone (both required), whether they are
-coming, a plus one with their name, children with a name and age each, a dietary note per person
-including each child, and a free note. Party size is worked out for you. Sending again with the
-same email updates that household's row.
+- *The yellow owner box is still there:* `formAction` or the `name` id is still empty, or the
+  paste lost a quote or comma. Compare it with the block the script printed.
+- *Replies never reach the form:* `formAction` probably still ends in `/viewform` rather than
+  `/formResponse`.
+- *An answer lands in the wrong column:* two ids are swapped in `rsvp-config.js`.
+- *"Will you join us?" is blank in the responses:* the option text in the form does not match
+  `Joyfully accepts` or `Regretfully declines` exactly.
+- *Nothing changes after an edit:* hard refresh the page, Cmd+Shift+R or Ctrl+Shift+R.
 
 ---
 
@@ -186,7 +213,7 @@ Everything still unknown is marked on the page with a small **"to come"** tag. S
 
 - `weekend.html` and `fr/weekend.html`: venue, times, dress code, shuttle
 - `travel.html` and `fr/travel.html`: hotel name, rates and booking link (the `#stay` section)
-- `js/rsvp-config.js`: `apiUrl` (required), and `rsvpBy` if you change the deadline
+- `js/rsvp-config.js`: `formAction` and the `fields` ids (required), and `rsvpBy` if you change the deadline
 
 ---
 
@@ -214,3 +241,51 @@ Everything else on the site stays small.
 - **A new page:** copy an existing one, change the content between `<header>` and `<footer>`, and
   add it to the nav in *every* page, English and French. French pages sit one folder deeper, so
   their asset paths start with `../`.
+
+
+---
+
+## 6. The Password
+
+The site asks for a password before showing anything. It is set in `js/gate.js`, stored as a
+SHA-256 hash rather than plain text, and a guest who types it correctly is remembered on that
+browser for 30 days. Every page is also marked `noindex`, so search engines leave it alone.
+
+**The current password is `nonowayjose`.**
+
+### Changing It
+
+1. Open any page of the site, right click, **Inspect**, and go to the **Console** tab.
+2. Paste this in, with your new password inside the quotes at the end, and press Enter:
+
+```js
+(async p => { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(p));
+  let d = 5381; for (const c of p) d = ((d * 33) ^ c.charCodeAt(0)) >>> 0;
+  console.log('SHA:', [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,'0')).join(''), '\nALT:', d);
+})('your new password')
+```
+
+3. It prints two values. Put them into `SHA` and `ALT` at the top of `js/gate.js`, and commit.
+
+Changing the password also signs everyone out, because the saved unlock no longer matches. They
+just type the new one once.
+
+### What It Does and Does Not Do
+
+It keeps the site from being read by anyone who stumbles across the link, and keeps it out of
+Google. That is the right bar for a wedding page and it is what most wedding sites do.
+
+It is **not** real security, and it is worth knowing why. GitHub Pages serves plain files, and
+your repository is public, so the password check happens in the visitor's own browser. Anyone who
+knows to open the page source, look in `js/gate.js`, or browse the repo on github.com can read
+every page without the password. Nobody is going to do that to find out your brunch plans, but do
+not put anything on the site you would mind a stranger reading: no door codes, no private
+addresses, no personal details about other people.
+
+### If You Ever Want the Real Thing
+
+- **Cloudflare Access** is free for small numbers of people: point your custom domain at
+  Cloudflare and it puts a real login in front of the site before anything is served.
+- **Netlify** offers built-in password protection on its paid plans. Hosting this site there is a
+  drag-and-drop job.
+- Or leave the gate as it is and simply keep anything sensitive off the site and in an email.

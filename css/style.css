@@ -199,7 +199,7 @@ ul.plain li{margin-bottom:8px}
 .field > label, .field > .label{display:block;font-size:14px;letter-spacing:.04em;margin-bottom:7px;font-weight:500}
 .field .hint{display:block;font-size:13.5px;color:var(--muted);margin:-3px 0 8px}
 .req{color:var(--gold)}
-input[type=text],input[type=email],input[type=tel],input[type=date],textarea,select{
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=password],input[type=number],textarea,select{
   width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);
   font:inherit;font-size:16px;color:var(--ink);
 }
@@ -393,3 +393,33 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
 .known .known-head{margin:0 0 4px;font-size:16px}
 .known #known-sub{margin:0;font-size:14.5px}
 @media (max-width:620px){.guestbox{padding:14px 14px 4px}}
+
+
+/* ---------- password gate ---------- */
+html.locked body > *{display:none!important}
+html.locked body > #gate{display:flex!important}
+html.locked{overflow:hidden}
+#gate{
+  position:fixed;inset:0;z-index:999;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.gate-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:40px 34px;width:100%;max-width:420px;text-align:center;
+}
+.gate-card h1{font-size:clamp(32px,7vw,44px);margin:0}
+.gate-date{font-size:12px;letter-spacing:.28em;color:var(--gold);margin:10px 0 18px}
+.gate-sub{color:var(--muted);font-size:15px;margin:0 0 22px}
+#gate label{display:block;font-size:13px;letter-spacing:.04em;text-align:left;margin-bottom:7px}
+#gate input{margin-bottom:14px;text-align:center;letter-spacing:.08em}
+#gate .btn{width:100%}
+.gate-error{color:#a33a2a;font-size:14px;min-height:20px;margin:12px 0 0}
+.shake{animation:shake .4s}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-7px)}
+  40%{transform:translateX(7px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}}

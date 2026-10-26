@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
 <title>RSVP · Noémie & Jose</title>
 <meta name="description" content="RSVP for Noémie and Jose's wedding celebration in Annecy on 18 September 2027.">
 <meta property="og:title" content="RSVP · Noémie & Jose">
@@ -16,6 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script src="js/gate.js"></script>
 </head>
 <body>
 <header class="site-head">
@@ -52,7 +54,7 @@
 <section class="tight">
   <div class="wrap narrow">
     <div id="setup-warning" class="setup-warning" hidden>
-      <p><strong>Site owners:</strong> the RSVP page is not connected yet. Deploy <code>form/rsvp-backend.gs</code> as a web app and paste its <code>/exec</code> URL into <code>js/rsvp-config.js</code>.</p>
+      <p><strong>Site owners:</strong> this form is not connected to your Google Form yet. Run <code>form/create-rsvp-form.gs</code> in Google Apps Script and paste what it prints into <code>js/rsvp-config.js</code>.</p>
     </div>
 
     <div class="known" id="rsvp-known" hidden>
@@ -65,7 +67,7 @@
         <div class="row2">
           <div class="field">
             <label for="email">Email <span class="req">*</span></label>
-            <span class="hint">We look you up by this, so you can come back and change your answers.</span>
+            <span class="hint">So we can send you the details nearer the time.</span>
             <input type="email" id="email" name="email" autocomplete="email" required>
           </div>
           <div class="field">
