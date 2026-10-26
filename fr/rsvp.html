@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSVP · Noémie & Jose</title>
+<meta name="description" content="Répondez à l'invitation de Noémie et Jose pour la fête du 18 septembre 2027 à Annecy.">
+<meta property="og:title" content="RSVP · Noémie & Jose">
+<meta property="og:description" content="Répondez à l'invitation de Noémie et Jose pour la fête du 18 septembre 2027 à Annecy.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="../img/hero.jpg">
+<link rel="alternate" hreflang="en" href="../rsvp.html">
+<link rel="alternate" hreflang="fr" href="rsvp.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>&#128330;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-head">
+  <nav class="nav">
+    <a class="brand" href="index.html">Noémie <span>&amp;</span> Jose</a>
+    <div class="lang" role="group" aria-label="Langue">
+      <a href="../rsvp.html" hreflang="en" lang="en"><svg class="flag" viewBox="0 0 19 13" aria-hidden="true" focusable="false"><rect width="19" height="13" fill="#f4f4f4"/><g fill="#b22234"><rect width="19" height="1"/><rect y="2" width="19" height="1"/><rect y="4" width="19" height="1"/><rect y="6" width="19" height="1"/><rect y="8" width="19" height="1"/><rect y="10" width="19" height="1"/><rect y="12" width="19" height="1"/></g><rect width="8.5" height="7" fill="#3c3b6e"/><g fill="#fff"><circle cx="1.7" cy="1.5" r=".55"/><circle cx="4.2" cy="1.5" r=".55"/><circle cx="6.7" cy="1.5" r=".55"/><circle cx="2.9" cy="3.5" r=".55"/><circle cx="5.5" cy="3.5" r=".55"/><circle cx="1.7" cy="5.4" r=".55"/><circle cx="4.2" cy="5.4" r=".55"/><circle cx="6.7" cy="5.4" r=".55"/></g></svg><span>EN</span></a>
+      <a href="rsvp.html" class="cur" aria-current="true" hreflang="fr" lang="fr"><svg class="flag" viewBox="0 0 19 13" aria-hidden="true" focusable="false"><rect width="6.34" height="13" fill="#2d2a26"/><rect x="6.34" width="6.33" height="13" fill="#f0c419"/><rect x="12.67" width="6.33" height="13" fill="#c8102e"/></svg><span>FR</span></a>
+    </div>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="story.html">Notre histoire</a>
+      <a href="weekend.html">Le week-end</a>
+      <a href="travel.html">Venir & dormir</a>
+      <a href="annecy.html">Annecy</a>
+      <a href="faq.html">Questions</a>
+      <a href="rsvp.html" class="active cta">RSVP</a>
+    </div>
+  </nav>
+</header>
+
+
+<section class="page-head">
+  <div class="wrap narrow">
+    <p class="eyebrow">RSVP</p>
+    <h1>Serez-vous des nôtres ?</h1>
+    <p class="lede">Nous nous sommes mariés en juin 2026 et avons fêté ça en petit comité à Boston. Nous avons maintenant
+      très envie de faire une plus grande fête avec toute notre communauté ! Nous serions ravis de vous voir le
+      samedi 18 septembre 2027 à Annecy pour notre célébration ! Merci de répondre avant le
+      <span class="rsvp-by">31 décembre 2026</span>.</p>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap narrow">
+    <div id="setup-warning" class="setup-warning" hidden>
+      <p><strong>Pour les propriétaires du site :</strong> la page RSVP n’est pas encore connectée. Déployez <code>form/rsvp-backend.gs</code> comme application web et collez son URL <code>/exec</code> dans <code>js/rsvp-config.js</code>.</p>
+    </div>
+
+    <div class="known" id="rsvp-known" hidden>
+      <p class="known-head"><strong id="known-title"></strong> <span id="known-detail"></span></p>
+      <p class="muted" id="known-sub"></p>
+    </div>
+
+    <div id="rsvp-panel">
+      <form class="form" id="rsvp-form" novalidate>
+        <div class="row2">
+          <div class="field">
+            <label for="email">E-mail <span class="req">*</span></label>
+            <span class="hint">C’est ce qui nous permet de retrouver votre réponse si vous revenez la modifier.</span>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="phone">Téléphone <span class="req">*</span></label>
+            <span class="hint">Au cas où nous aurions besoin de vous joindre pendant le week-end.</span>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label">Serez-vous des nôtres ? <span class="req">*</span></span>
+          <div class="choices two">
+            <label class="choice"><input type="radio" name="attending" value="Joyfully accepts" required><span>Avec joie, comptez sur nous</span></label>
+            <label class="choice"><input type="radio" name="attending" value="Regretfully declines"><span>Malheureusement non</span></label>
+          </div>
+        </div>
+
+        <div id="if-coming" hidden>
+          <fieldset class="guestbox" id="guest-you">
+            <legend>Vous</legend>
+            <div class="field">
+              <label for="name">Votre nom complet <span class="req">*</span></label>
+              <input type="text" id="name" name="name" autocomplete="name">
+            </div>
+            <label class="check"><input type="checkbox" class="dietToggle"><span>Restriction alimentaire ou allergie</span></label>
+            <div class="field dietbox" hidden>
+              <label for="dietYou">Que doit savoir le traiteur ?</label>
+              <input type="text" id="dietYou" class="dietNote" placeholder="Végétarien, allergie aux noix, sans gluten…">
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <span class="label">Venez-vous accompagné ?</span>
+            <div class="choices two">
+              <label class="choice"><input type="radio" name="plusOne" value="no"><span>Non, je viens seul(e)</span></label>
+              <label class="choice"><input type="radio" name="plusOne" value="yes"><span>Oui, je viens avec quelqu’un</span></label>
+            </div>
+          </div>
+
+          <fieldset class="guestbox" id="plus-one-box" hidden>
+            <legend>Votre accompagnant(e)</legend>
+            <div class="field">
+              <label for="plusOneName">Son nom</label>
+              <span class="hint">Si vous ne le savez pas encore, laissez vide et dites-le nous plus tard.</span>
+              <input type="text" id="plusOneName" name="plusOneName">
+            </div>
+            <label class="check"><input type="checkbox" class="dietToggle"><span>Restriction alimentaire ou allergie</span></label>
+            <div class="field dietbox" hidden>
+              <label for="dietPlus">Que doit savoir le traiteur ?</label>
+              <input type="text" id="dietPlus" class="dietNote" placeholder="Végétarien, allergie aux noix, sans gluten…">
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <span class="label">Venez-vous avec des enfants ?</span>
+            <div class="choices two">
+              <label class="choice"><input type="radio" name="hasChildren" value="no"><span>Sans enfants</span></label>
+              <label class="choice"><input type="radio" name="hasChildren" value="yes"><span>Oui, avec des enfants</span></label>
+            </div>
+          </div>
+
+          <div id="children-box" hidden>
+            <div class="field narrowfield">
+              <label for="childCount">Combien d’enfants ?</label>
+              <select id="childCount">
+                <option>1</option><option>2</option><option>3</option><option>4</option>
+                <option>5</option><option>6</option><option>7</option><option>8</option>
+              </select>
+            </div>
+            <div id="children-list"></div>
+          </div>
+
+        </div>
+
+        <div class="field">
+          <label for="note">Autre chose à nous dire ?</label>
+          <textarea id="note" name="note" rows="3"></textarea>
+        </div>
+
+        <button class="btn" type="submit" id="rsvp-submit">Envoyer notre réponse</button>
+        <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div class="thanks" id="rsvp-thanks" hidden>
+      <h2>Merci</h2>
+      <p></p>
+      <p style="margin-top:18px"><a class="btn ghost" href="travel.html">Préparer le voyage</a></p>
+    </div>
+  </div>
+</section>
+
+
+<footer class="site-foot">
+  <div class="wrap foot-grid">
+    <div class="foot-note">Noémie &amp; Jose · 18 septembre 2027 · Annecy</div>
+    <div class="foot-links">
+      <a href="index.html">Accueil</a>
+      <a href="story.html">Notre histoire</a>
+      <a href="weekend.html">Le week-end</a>
+      <a href="travel.html">Venir & dormir</a>
+      <a href="annecy.html">Annecy</a>
+      <a href="faq.html">Questions</a>
+      <a href="rsvp.html">RSVP</a>
+    </div>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+<script src="../js/rsvp-config.js"></script>
+<script src="../js/rsvp.js"></script>
+</body>
+</html>

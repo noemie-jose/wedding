@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notre histoire · Noémie & Jose</title>
+<meta name="description" content="Toutes les photos de Noémie et Jose de 2020 à 2026, sur une frise et une carte.">
+<meta property="og:title" content="Notre histoire · Noémie & Jose">
+<meta property="og:description" content="Toutes les photos de Noémie et Jose de 2020 à 2026, sur une frise et une carte.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="../img/hero.jpg">
+<link rel="alternate" hreflang="en" href="../story.html">
+<link rel="alternate" hreflang="fr" href="story.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>&#128330;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-head">
+  <nav class="nav">
+    <a class="brand" href="index.html">Noémie <span>&amp;</span> Jose</a>
+    <div class="lang" role="group" aria-label="Langue">
+      <a href="../story.html" hreflang="en" lang="en"><svg class="flag" viewBox="0 0 19 13" aria-hidden="true" focusable="false"><rect width="19" height="13" fill="#f4f4f4"/><g fill="#b22234"><rect width="19" height="1"/><rect y="2" width="19" height="1"/><rect y="4" width="19" height="1"/><rect y="6" width="19" height="1"/><rect y="8" width="19" height="1"/><rect y="10" width="19" height="1"/><rect y="12" width="19" height="1"/></g><rect width="8.5" height="7" fill="#3c3b6e"/><g fill="#fff"><circle cx="1.7" cy="1.5" r=".55"/><circle cx="4.2" cy="1.5" r=".55"/><circle cx="6.7" cy="1.5" r=".55"/><circle cx="2.9" cy="3.5" r=".55"/><circle cx="5.5" cy="3.5" r=".55"/><circle cx="1.7" cy="5.4" r=".55"/><circle cx="4.2" cy="5.4" r=".55"/><circle cx="6.7" cy="5.4" r=".55"/></g></svg><span>EN</span></a>
+      <a href="story.html" class="cur" aria-current="true" hreflang="fr" lang="fr"><svg class="flag" viewBox="0 0 19 13" aria-hidden="true" focusable="false"><rect width="6.34" height="13" fill="#2d2a26"/><rect x="6.34" width="6.33" height="13" fill="#f0c419"/><rect x="12.67" width="6.33" height="13" fill="#c8102e"/></svg><span>FR</span></a>
+    </div>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="story.html" class="active">Notre histoire</a>
+      <a href="weekend.html">Le week-end</a>
+      <a href="travel.html">Venir & dormir</a>
+      <a href="annecy.html">Annecy</a>
+      <a href="faq.html">Questions</a>
+      <a href="rsvp.html" class="cta">RSVP</a>
+    </div>
+  </nav>
+</header>
+
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Notre histoire</p>
+    <h1>Tous les endroits où nous sommes passés</h1>
+    <p class="lede">Nous nous sommes rencontrés dans l’Oregon en 2020 par des amis, avec une année à distance au milieu, et depuis nous collectionnons les endroits et les gens. Toutes les photos dans l’ordre, avec la carte des lieux. Faites défiler la frise et la carte suit ; cliquez sur un point pour voir ce qui s’y est passé.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="storytabs" role="tablist" aria-label="Notre histoire">
+    <button role="tab" id="tab-story" aria-selected="true" aria-controls="view-story">Histoire et carte</button>
+    <button role="tab" id="tab-h" aria-selected="false" aria-controls="view-h">Frise horizontale</button>
+  </div>
+
+  <section class="storylayout" id="view-story" role="tabpanel" aria-labelledby="tab-story">
+    <aside class="mapcol">
+      <div class="mapcard">
+        <div class="maptools">
+          <div class="seg" role="group" id="regions">
+            <button data-r="world" aria-pressed="true">World</button>
+            <button data-r="pnw">Pacific NW</button>
+            <button data-r="ne">New England</button>
+            <button data-r="eu">Europe</button>
+          </div>
+          <button class="play" id="play" aria-pressed="false"><svg viewBox="0 0 12 12"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg><span>Play</span></button>
+        </div>
+        <div class="mapwrap">
+          <svg id="map" role="img" aria-label="Notre histoire"></svg>
+          <div class="nowcard" id="nowcard"></div>
+          <div class="popup" id="popup" role="dialog"></div>
+          <div class="zoombtns"><button id="zin" aria-label="+">+</button><button id="zout" aria-label="-">&#8722;</button></div>
+        </div>
+        <div class="legend" id="legend"></div>
+      </div>
+    </aside>
+
+    <main class="timelinecol">
+      <nav class="yearnav" id="yearnav"></nav>
+      <div id="years"></div>
+    </main>
+  </section>
+
+  <section class="hview" id="view-h" role="tabpanel" aria-labelledby="tab-h" hidden>
+    <div class="htools">
+      <div class="hyears" id="hyears"></div>
+      <div class="hnav"><button id="hprev" aria-label="&#8249;">&#8249;</button><button id="hnext" aria-label="&#8250;">&#8250;</button></div>
+    </div>
+    <div class="hscroll" id="hscroll" tabindex="0">
+      <div class="htrack" id="htrack"><svg class="haxis" id="haxis"></svg></div>
+    </div>
+    <p class="hhint">Faites glisser, balayez ou utilisez les flèches pour avancer dans le temps. Les cartes se placent au-dessus et au-dessous de la ligne, à leur date. Cliquez sur une photo pour l’agrandir, ou sur un lieu pour le voir sur la carte.</p>
+  </section>
+
+  <p class="muted" style="font-size:12.5px;margin:18px 0 40px">Les points marqués « environ » sont placés à un endroit représentatif d’un État, d’une région ou d’un pays, quand la légende ne cite pas de ville précise.</p>
+</div>
+
+<dialog id="lb"><div class="lb">
+  <button class="close" aria-label="Close">&#10005;</button>
+  <button class="nav prev" aria-label="&#8249;">&#8249;</button>
+  <img alt="">
+  <div class="cap"></div>
+  <button class="nav next" aria-label="&#8250;">&#8250;</button>
+</div></dialog>
+
+
+<footer class="site-foot">
+  <div class="wrap foot-grid">
+    <div class="foot-note">Noémie &amp; Jose · 18 septembre 2027 · Annecy</div>
+    <div class="foot-links">
+      <a href="index.html">Accueil</a>
+      <a href="story.html">Notre histoire</a>
+      <a href="weekend.html">Le week-end</a>
+      <a href="travel.html">Venir & dormir</a>
+      <a href="annecy.html">Annecy</a>
+      <a href="faq.html">Questions</a>
+      <a href="rsvp.html">RSVP</a>
+    </div>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+<script>window.SITE_PREFIX="../";</script>
+<script src="../js/vendor/d3.min.js"></script>
+<script src="../js/vendor/topojson-client.min.js"></script>
+<script src="../data/map-data.js"></script>
+<script src="../js/story-data.js"></script>
+<script src="../js/story.js"></script>
+</body>
+</html>
